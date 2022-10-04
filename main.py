@@ -52,7 +52,9 @@ def stepThroughRecipe(recipe_num):
       step_counter += 1
 
 def searchForRecipe(recipe_name):
+  recipe_num = 0
   for recipe in list_of_recipes:
+    recipe_num+=1
     if(recipe.name.lower() == recipe_name.lower()):
       selected_recipe = recipe
       print("Description: ", selected_recipe.description)
