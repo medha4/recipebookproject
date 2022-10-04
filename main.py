@@ -12,7 +12,22 @@ r3 = Recipe("pecan pie", "pie with pecans", "pecans, flour, cinnamon, sugar", ["
 
 list_of_recipes = [r1, r2, r3] #hard coded list of recipes
 
-
+def SearchbyName(recipe_name):
+  for recipe in list_of_recipes:
+    if recipe.name.lower() == recipe_name.lower():
+      print("Recipe found!")
+      print("Ingredients: "+recipe.ingredients)
+      print("Steps: ")
+      step_counter = 0
+      for step in recipe.steps:
+        step_counter+=1
+        print(step_counter, step)
+      print("print any integer to return to the main menu!")
+      return
+        
+      
+  print("Recipe not found!")
+  
 
 def displayRecipe(recipe_num):
   selected_recipe = list_of_recipes[recipe_num-1]
@@ -51,7 +66,9 @@ try: #error handling for any command besides an integer
     if user_input == 1:
       print("Create a Recipe")
     elif user_input == 2:
-      print("Search for a recipe")
+      print("What recipe would you like to search for?")
+      recipe_name = input()
+      SearchbyName(recipe_name)
     elif user_input == 3:
       print("Browse All Recipes")
       recipe_counter = 0
