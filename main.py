@@ -34,7 +34,7 @@ def stepThroughRecipe(recipe_num):
   steps = selected_recipe.steps
   step_counter = 0
   while(step_counter < len(steps)):
-    print(str(step_counter) + " " + steps[step_counter])
+    print(str(step_counter+1) + " " + steps[step_counter])
     response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
     if(response.lower() == "exit"):
       break
@@ -46,8 +46,6 @@ print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search
 try: #error handling for any command besides an integer
   user_input = int(input())
   while user_input != -1: #runs until the user terminates the program
-    print(
-      "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
     if user_input == 1:
       print("Create a Recipe")
     elif user_input == 2:
@@ -60,11 +58,16 @@ try: #error handling for any command besides an integer
         print(recipe_counter, recipe.name)
       print("Which number recipe would you like to view?") #need to add error handling
       recipe_to_view = int(input())
+      while recipe_to_view > len(list_of_recipes) or recipe_to_view < 0:
+        print("Invalid number, please try again")
+        recipe_to_view = int(input())
       displayRecipe(recipe_to_view)
     else:
       print("Error: Command not found. Please try again.")
       print(
         "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
+    print(
+      "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
     user_input = int(input())
 except ValueError: #if command not an integer, send error message, and terminate the program
   print("Error: Command not found. Please try again.")
