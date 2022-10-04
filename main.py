@@ -12,7 +12,17 @@ r3 = Recipe("pecan pie", "pie with pecans", "pecans, flour, cinnamon, sugar", ["
 
 list_of_recipes = [r1, r2, r3] #hard coded list of recipes
 
-
+def createRecipe():
+	print("Please enter the name of your recipe: ")
+	recipeName = input()
+	print("Please enter the description for your recipe: ")
+	recipeDescription = input()
+	print("Please enter the ingredients for your recipe separated by commas: ")
+	recipeIngredients = input()
+	print("Please enter the steps for your recipe separated by commas")
+	recipeSteps = input()
+	list_of_recipes.append(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(",")))
+	print("Recipe Created")
 
 def displayRecipe(recipe_num):
   selected_recipe = list_of_recipes[recipe_num-1]
@@ -47,7 +57,8 @@ try: #error handling for any command besides an integer
   user_input = int(input())
   while user_input != -1: #runs until the user terminates the program
     if user_input == 1:
-      print("Create a Recipe")
+      print("Create a Recipe Here")
+      createRecipe()
     elif user_input == 2:
       print("Search for a recipe")
     elif user_input == 3:
