@@ -58,6 +58,9 @@ try: #error handling for any command besides an integer
         print(recipe_counter, recipe.name)
       print("Which number recipe would you like to view?") #need to add error handling
       recipe_to_view = int(input())
+      while recipe_to_view > len(list_of_recipes) or recipe_to_view < 0:
+        print("Invalid number, please try again")
+        recipe_to_view = int(input())
       displayRecipe(recipe_to_view)
     else:
       print("Error: Command not found. Please try again.")
