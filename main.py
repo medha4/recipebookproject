@@ -34,7 +34,7 @@ def stepThroughRecipe(recipe_num):
   steps = selected_recipe.steps
   step_counter = 0
   while(step_counter < len(steps)):
-    print(str(step_counter) + " " + steps[step_counter])
+    print(str(step_counter+1) + " " + steps[step_counter])
     response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
     if(response.lower() == "exit"):
       break
