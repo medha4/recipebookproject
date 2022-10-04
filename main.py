@@ -24,6 +24,22 @@ def displayRecipe(recipe_num):
   for step in selected_recipe.steps:
     step_counter+=1
     print(step_counter, step)
+  response = input("Press enter to view this recipe step by step, or type SKIP.")
+  if response.lower() != "skip":
+    stepThroughRecipe(recipe_num)
+  print("Enter any integer to return to the main menu :)")
+
+def stepThroughRecipe(recipe_num):
+  selected_recipe = list_of_recipes[recipe_num-1]
+  steps = selected_recipe.steps
+  step_counter = 0
+  while(step_counter < len(steps)):
+    print(str(step_counter) + " " + steps[step_counter])
+    response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
+    if(response.lower() == "exit"):
+      break
+    else:
+      step_counter += 1
 
 print("Welcome to MMY Recipe Book!")
 print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program") #command line prompt
