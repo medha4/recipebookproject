@@ -6,18 +6,45 @@ class Recipe:
     self.steps = steps
 
 r1 = Recipe("apple pie", "pie with apples", "apples, flour, cinnamon, sugar", ["cut the apples", "mix sugar and cinnamon", "roast them"]) #hard coded a new recipe
+r2 = Recipe("pumpkin pie", "pie with pumpkins", "pumpkin, flour, cinnamon, sugar", ["cut the pumpkin", "mix sugar and cinnamon", "roast them"]) #hard coded a new recipe
+r3 = Recipe("pecan pie", "pie with pecans", "pecans, flour, cinnamon, sugar", ["open the pecan box", "mix sugar and cinnamon", "roast them"]) #hard coded a new recipe
+
+
+list_of_recipes = [r1, r2, r3] #hard coded list of recipes
+
+
+
+def displayRecipe(recipe_num):
+  selected_recipe = list_of_recipes[recipe_num-1]
+  print(selected_recipe.name)
+  print("Description: ", selected_recipe.description)
+  print("Ingredients: ", selected_recipe.ingredients)
+  print("Steps:")
+  step_counter = 0
+  for step in selected_recipe.steps:
+    step_counter+=1
+    print(step_counter, step)
 
 print("Welcome to MMY Recipe Book!")
 print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program") #command line prompt
 try: #error handling for any command besides an integer
   user_input = int(input())
   while user_input != -1: #runs until the user terminates the program
+    print(
+      "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
     if user_input == 1:
       print("Create a Recipe")
     elif user_input == 2:
       print("Search for a recipe")
     elif user_input == 3:
-      print("Browse all recipes")
+      print("Browse All Recipes")
+      recipe_counter = 0
+      for recipe in list_of_recipes:
+        recipe_counter+=1
+        print(recipe_counter, recipe.name)
+      print("Which number recipe would you like to view?") #need to add error handling
+      recipe_to_view = int(input())
+      displayRecipe(recipe_to_view)
     else:
       print("Error: Command not found. Please try again.")
       print(
