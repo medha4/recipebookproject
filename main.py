@@ -46,8 +46,6 @@ print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search
 try: #error handling for any command besides an integer
   user_input = int(input())
   while user_input != -1: #runs until the user terminates the program
-    print(
-      "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
     if user_input == 1:
       print("Create a Recipe")
     elif user_input == 2:
@@ -65,6 +63,8 @@ try: #error handling for any command besides an integer
       print("Error: Command not found. Please try again.")
       print(
         "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
+    print(
+      "Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program")
     user_input = int(input())
 except ValueError: #if command not an integer, send error message, and terminate the program
   print("Error: Command not found. Please try again.")
