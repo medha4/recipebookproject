@@ -45,11 +45,15 @@ def stepThroughRecipe(recipe_num):
   step_counter = 0
   while(step_counter < len(steps)):
     print(str(step_counter+1) + " " + steps[step_counter])
-    response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
-    if(response.lower() == "exit"):
+    if step_counter == len(steps)-1:
+      print("End of the recipe!")
       break
     else:
-      step_counter += 1
+      response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
+      if(response.lower() == "exit"):
+        break
+      else:
+        step_counter += 1
 
 def searchForRecipe(recipe_name):
   x = False
