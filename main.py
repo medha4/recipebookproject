@@ -37,7 +37,7 @@ def displayRecipe(recipe_num):
   response = input("Press enter to view this recipe step by step, or type SKIP.")
   if response.lower() != "skip":
     stepThroughRecipe(recipe_num)
-  print("Enter any integer to return to the main menu :)")
+  input("Press Enter to return to main menu")
 
 def stepThroughRecipe(recipe_num):
   selected_recipe = list_of_recipes[recipe_num-1]
