@@ -52,10 +52,12 @@ def stepThroughRecipe(recipe_num):
       step_counter += 1
 
 def searchForRecipe(recipe_name):
+  x = False
   recipe_num = 0
   for recipe in list_of_recipes:
     recipe_num+=1
     if(recipe.name.lower() == recipe_name.lower()):
+      x = True
       selected_recipe = recipe
       print("Description: ", selected_recipe.description)
       print("Ingredients: ", selected_recipe.ingredients)
@@ -68,6 +70,9 @@ def searchForRecipe(recipe_name):
       if response.lower() != "skip":
         stepThroughRecipe(recipe_num)
       print("Enter any integer to return to the main menu :)")
+  if x == False:
+    print("Recipe not found!")
+    input("Press enter to return to main menu")
 
 print("Welcome to MMY Recipe Book!")
 print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program") #command line prompt
