@@ -1,6 +1,6 @@
 from fuzzywuzzy import fuzz
 
-class Recipe:
+class Recipe: #created the recipe class
   def __init__(self, name, description, ingredients, steps):
     self.name = name
     self.description = description
@@ -14,7 +14,7 @@ r3 = Recipe("pecan pie", "pie with pecans", "pecans, flour, cinnamon, sugar", ["
 
 list_of_recipes = [r1, r2, r3] #hard coded list of recipes
 
-def createRecipe():
+def createRecipe(): #allows the user to create and enter their own recipe
 	print("Please enter the name of your recipe: ")
 	recipeName = input()
 	print("Please enter the description for your recipe: ")
@@ -23,26 +23,26 @@ def createRecipe():
 	recipeIngredients = input()
 	print("Please enter the steps for your recipe separated by commas")
 	recipeSteps = input()
-	list_of_recipes.append(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(",")))
+	list_of_recipes.append(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(","))) #adds the recipe object to the internal list of recipes
 	print("Recipe Created")
 
 def displayRecipe(recipe_num):
-  selected_recipe = list_of_recipes[recipe_num-1]
+  selected_recipe = list_of_recipes[recipe_num-1] #displays the selected recipe given its position in the list
   print(selected_recipe.name)
   print("Description: ", selected_recipe.description)
   print("Ingredients: ", selected_recipe.ingredients)
   print("Steps:")
   step_counter = 0
-  for step in selected_recipe.steps:
+  for step in selected_recipe.steps: #allows the user to parse through the steps one by one
     step_counter+=1
     print(step_counter, step)
   response = input("Press enter to view this recipe step by step, or type SKIP.")
-  if response.lower() != "skip":
+  if response.lower() != "skip": #the user can skip viewing the recipe step by step
     stepThroughRecipe(recipe_num)
   input("Press Enter to return to main menu")
 
-def stepThroughRecipe(recipe_num):
-  selected_recipe = list_of_recipes[recipe_num-1]
+def stepThroughRecipe(recipe_num): #allows the user to parse through the steps one by one
+  selected_recipe = list_of_recipes[recipe_num-1] #displays the selected recipe given its position in the list
   steps = selected_recipe.steps
   step_counter = 0
   while(step_counter < len(steps)):
@@ -52,12 +52,12 @@ def stepThroughRecipe(recipe_num):
       break
     else:
       response = input("Press enter to view the next step, or enter EXIT to stop viewing this recipe.")
-      if(response.lower() == "exit"):
+      if(response.lower() == "exit"): #the user can exit viewing the recipe step by step
         break
       else:
         step_counter += 1
 
-def displaySearchedRecipe(selected_recipe, recipe_num):
+def displaySearchedRecipe(selected_recipe, recipe_num): #displays the selected recipe
   print("Description: ", selected_recipe.description)
   print("Ingredients: ", selected_recipe.ingredients)
   print("Steps:")
@@ -70,7 +70,7 @@ def displaySearchedRecipe(selected_recipe, recipe_num):
     stepThroughRecipe(recipe_num)
   print("Enter any integer to return to the main menu :)")
 
-def searchBySubstring(recipe_name):
+def searchBySubstring(recipe_name): #if the recipe the user is searching for matches a substring within another recipe then it selects the first recipe that matches
   recipe_num = 0
   for recipe in list_of_recipes:
     recipe_num+=1
@@ -78,7 +78,7 @@ def searchBySubstring(recipe_name):
       return True, recipe, recipe_num
   return False, -1, -1
 
-def searchByFuzzy(recipe_name):
+def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly off from other recipes
   recipe_num = 0
   for recipe in list_of_recipes:
     recipe_num+=1
@@ -117,7 +117,7 @@ try: #error handling for any command besides an integer
       createRecipe()
     elif user_input == 2:
       print("Search for a recipe")
-      recipe_to_search = input("Enter the name of the recipe you are looking for, exactly. ")
+      recipe_to_search = input("Enter the name of the recipe you are looking for. ")
       searchForRecipe(recipe_to_search)
     elif user_input == 3:
       print("Browse All Recipes")
