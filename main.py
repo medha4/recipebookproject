@@ -1,3 +1,5 @@
+from fuzzywuzzy import fuzz
+
 class Recipe:
   def __init__(self, name, description, ingredients, steps):
     self.name = name
@@ -55,28 +57,55 @@ def stepThroughRecipe(recipe_num):
       else:
         step_counter += 1
 
+def displaySearchedRecipe(selected_recipe, recipe_num):
+  print("Description: ", selected_recipe.description)
+  print("Ingredients: ", selected_recipe.ingredients)
+  print("Steps:")
+  step_counter = 0
+  for step in selected_recipe.steps:
+    step_counter+=1
+    print(step_counter, step)
+  response = input("Press enter to view this recipe step by step, or type SKIP.")
+  if response.lower() != "skip":
+    stepThroughRecipe(recipe_num)
+  print("Enter any integer to return to the main menu :)")
+
+def searchBySubstring(recipe_name):
+  recipe_num = 0
+  for recipe in list_of_recipes:
+    recipe_num+=1
+    if(recipe_name.lower() in recipe.name.lower()):
+      return True, recipe, recipe_num
+  return False, -1, -1
+
+def searchByFuzzy(recipe_name):
+  recipe_num = 0
+  for recipe in list_of_recipes:
+    recipe_num+=1
+    if(fuzz.ratio(recipe_name.lower(), recipe.name.lower()) >= 70): #if the fuzzy ratio is 70% or higher, then it will return the recipe
+      return True, recipe, recipe_num
+  return False, -1
+
 def searchForRecipe(recipe_name):
   x = False
   recipe_num = 0
   for recipe in list_of_recipes:
     recipe_num+=1
-    if(recipe.name.lower() == recipe_name.lower()):
+    if(recipe.name.lower() == recipe_name.lower()): #search for a recipe exactly by name
       x = True
       selected_recipe = recipe
-      print("Description: ", selected_recipe.description)
-      print("Ingredients: ", selected_recipe.ingredients)
-      print("Steps:")
-      step_counter = 0
-      for step in selected_recipe.steps:
-        step_counter+=1
-        print(step_counter, step)
-      response = input("Press enter to view this recipe step by step, or type SKIP.")
-      if response.lower() != "skip":
-        stepThroughRecipe(recipe_num)
-      print("Enter any integer to return to the main menu :)")
+      displaySearchedRecipe(selected_recipe)
   if x == False:
-    print("Recipe not found!")
-    input("Press enter to return to main menu")
+    x, selected_recipe, recipe_num = searchBySubstring(recipe_name) #search by substring matching
+    if not x:
+      x, selected_recipe, recipe_num = searchByFuzzy(recipe_name) #search by fuzzy searching
+      if not x:
+        print("Recipe not found!")
+        input("Press enter to return to main menu")
+      else:
+        displaySearchedRecipe(selected_recipe, recipe_num)
+    else:
+      displaySearchedRecipe(selected_recipe, recipe_num)
 
 print("Welcome to MMY Recipe Book!")
 print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program") #command line prompt

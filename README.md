@@ -9,3 +9,5 @@ Slack channel name: MMYRecipeBook
 Jira board url: https://mmy-recipe-book.atlassian.net/jira/software/projects/MRB/boards/1
 
 Language: Python
+
+Please install the module, FuzzyWuzzy, prior to running the program through "pip3 install fuzzywuzzy"
