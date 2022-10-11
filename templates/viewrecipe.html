@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MMY Recipe Book!</title>
+</head>
+<body>
+<h1>View the Recipe</h1>
+{{name}}
+{{description}}
+{{ingredients}}
+{{steps}}
+<button onclick="goBack()">Go Back</button>
+
+  <div class="container">
+    <li class="slides-container-li" id="slides-container-li">
+      {% for step in steps %}
+    	    <div value= {{ name }} id={{ name }} name="recipe_name">{{ step }}</div>
+    	{% endfor %}
+    </li>
+  </div>
+
+  <div class="btn-container">
+    <button class="Previous-btn" id="Previous-btn" onclick="clickPrevious()">Previous</button>
+
+    <button class="slide-btn" id="slide-btn" onclick="clickNext()">next</button>
+
+  </div>
+<button onclick="goBack()">Go Back</button>
+
+</body>
+</html>
+<script>
+function goBack() {
+  window.history.back();
+}
+var listItems = document.getElementById("slides-container-li").children;
+
+let currentIndex = 0;
+
+
+
+function clickNext() {
+  //console.log(currentIndex >= listItems.length - 1);
+  if (currentIndex >= listItems.length - 1) {
+    currentIndex = -1;
+  }
+  [...listItems].forEach(item => item.style.display = 'none')
+  listItems[++currentIndex].style.display = "inline"
+  ;
+  //console.log('after increment', currentIndex)
+  }
+
+function clickPrevious() {
+    if (currentIndex <= 0) {
+    currentIndex = listItems.length;
+  }
+  [...listItems].forEach(item => item.style.display = 'none')
+  listItems[--currentIndex].style.display = "inline";
+}
+</script>

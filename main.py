@@ -21,7 +21,7 @@ def createRecipe(): #allows the user to create and enter their own recipe
 	recipeDescription = input()
 	print("Please enter the ingredients for your recipe separated by commas: ")
 	recipeIngredients = input()
-	print("Please enter the steps for your recipe separated by commas")
+	print("Please enter the steps for your recipe separated by commas: ")
 	recipeSteps = input()
 	list_of_recipes.append(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(","))) #adds the recipe object to the internal list of recipes
 	print("Recipe Created")
