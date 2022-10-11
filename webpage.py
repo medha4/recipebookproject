@@ -48,8 +48,9 @@ def index():
 
 @app.route("/create", methods=['POST'])
 def create_a_recipe():
-	print(request.form)
-	return "Recipe Created" 
+	recipe_dict = request.form.to_dict()
+	list_of_recipes.append(Recipe(recipe_dict['recipename'], recipe_dict['recipedescription'], recipe_dict['recipeingredients'], recipe_dict['recipesteps'].split(","))) #adds the recipe object to the internal list of recipes
+	return render_template('viewrecipe.html', name=recipe_dict['recipename'], description=recipe_dict['recipedescription'], ingredients=recipe_dict['recipeingredients'], steps=recipe_dict['recipesteps'].split(","))
 
 @app.route("/displayrecipe", methods=['POST'])
 def display_the_recipe():
