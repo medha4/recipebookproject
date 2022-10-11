@@ -5,8 +5,15 @@
     <title>Browse</title>
 </head>
 <body>
-<h1>View the Recipes</h1>
-<h2>{{ shortcode }}</h2>
+<h1>View the Recipes and Choose One</h1>
+<form action="/displayrecipe", method="POST">
+    <select name="options" id="options">
+    	{% for recipe in list_of_recipes %}
+    	    <option value= {{ recipe.name }} id={{ recipe.name }} name="recipe_name">{{ recipe.name }}</option>
+    	{% endfor %}
+	</select>
+	<input type="submit">
+</form>
 <button onclick="goBack()">Go Back</button>
 </body>
 </html>
