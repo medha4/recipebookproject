@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from fuzzywuzzy import fuzz
 app = Flask(__name__)
 
 class Recipe: #created the recipe class
@@ -14,6 +15,24 @@ r3 = Recipe("pecan pie", "pie with pecans", "pecans, flour, cinnamon, sugar", ["
 
 
 list_of_recipes = [r1, r2, r3] #hard coded list of recipes
+
+def searchBySubstring(recipe_name): #if the recipe the user is searching for matches a substring within another recipe then it selects the first recipe that matches
+  recipe_num = 0
+  for recipe in list_of_recipes:
+    recipe_num+=1
+    if(recipe_name.lower() in recipe.name.lower()):
+      return True, recipe, recipe_num
+  return False, -1, -1
+
+def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly off from other recipes
+  recipe_num = 0
+  for recipe in list_of_recipes:
+    recipe_num+=1
+    if(fuzz.ratio(recipe_name.lower(), recipe.name.lower()) >= 70): #if the fuzzy ratio is 70% or higher, then it will return the recipe
+      return True, recipe, recipe_num
+  return False, -1
+
+
 
 @app.route("/")
 def home():
@@ -62,6 +81,28 @@ def display_the_recipe():
 		if recipe_name in recipe.name:
 			return render_template('viewrecipe.html', name=recipe.name, description=recipe.description, ingredients=recipe.ingredients, steps=recipe.steps)
 	return "Error: Recipe Not Found"
+
+@app.route("/search", methods=['POST'])
+def search_for_recipe():
+	recipe_name = request.form.to_dict()['search']
+	x = False
+	recipe_num = 0
+	for recipe in list_of_recipes:
+	  recipe_num+=1
+	  if(recipe.name.lower() == recipe_name.lower()): #search for a recipe exactly by name
+	    x = True
+	    selected_recipe = recipe
+	    return render_template('viewrecipe.html', name=selected_recipe.name, description=selected_recipe.description, ingredients=selected_recipe.ingredients, steps=selected_recipe.steps)
+	if x == False:
+	  x, selected_recipe, recipe_num = searchBySubstring(recipe_name) #search by substring matching
+	  if not x:
+	    x, selected_recipe, recipe_num = searchByFuzzy(recipe_name) #search by fuzzy searching
+	    if not x:
+	      return "Error: Recipe Not Found"
+	    else:
+	      return render_template('viewrecipe.html', name=selected_recipe.name, description=selected_recipe.description, ingredients=selected_recipe.ingredients, steps=selected_recipe.steps)
+	  else:
+	  	return render_template('viewrecipe.html', name=selected_recipe.name, description=selected_recipe.description, ingredients=selected_recipe.ingredients, steps=selected_recipe.steps)
 
 if __name__ == "__main__":
     app.run()

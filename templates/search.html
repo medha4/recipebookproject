@@ -6,7 +6,11 @@
 </head>
 <body>
 <h1>Search the Recipes</h1>
-<h2>{{ shortcode }}</h2>
+<form action="/search", method="POST">
+  <label for="search">Please enter the name of the recipe you're searching for:</label>
+  <input type="text" id="search" name="search"><br><br>
+  <input type="submit" value="Submit">
+</form>
 <button onclick="goBack()">Go Back</button>
 </body>
 </html>
