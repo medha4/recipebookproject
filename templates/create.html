@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+</head>
+<body>
+<h1>Create a Recipe</h1>
+<form action="/create", method="POST">
+  <label for="recipename">Please enter the name of your recipe:</label>
+  <input type="text" id="recipename" name="recipename"><br><br>
+  <label for="recipedescription">Please enter the description for your recipe:</label>
+  <input type="text" id="recipedescription" name="recipedescription"><br><br>
+  <label for="recipeingredients">Please enter the ingredients for your recipe separated by commas:</label>
+  <input type="text" id="recipeingredients" name="recipeingredients"><br><br>
+  <label for="recipesteps">Please enter the steps for your recipe separated by commas:</label>
+  <input type="text" id="recipesteps" name="recipesteps"><br><br>
+  <input type="submit" value="Submit">
+</form>
+<button onclick="goBack()">Go Back</button>
+</body>
+</html>
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
