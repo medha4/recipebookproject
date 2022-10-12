@@ -1,4 +1,4 @@
-from fuzzywuzzy import fuzz
+from database import get_database, sendRecipeToDatabase, getRecipeFromDatabase, getRecipeSubstringFromDatabase, getRecipesFromDatabase
 
 class Recipe: #created the recipe class
   def __init__(self, name, description, ingredients, steps):
@@ -23,26 +23,27 @@ def createRecipe(): #allows the user to create and enter their own recipe
 	recipeIngredients = input()
 	print("Please enter the steps for your recipe separated by commas: ")
 	recipeSteps = input()
-	list_of_recipes.append(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(","))) #adds the recipe object to the internal list of recipes
+	sendRecipeToDatabase(Recipe(recipeName, recipeDescription, recipeIngredients, recipeSteps.split(","))) #adds the recipe object to the internal list of recipes
 	print("Recipe Created")
 
-def displayRecipe(recipe_num):
-  selected_recipe = list_of_recipes[recipe_num-1] #displays the selected recipe given its position in the list
-  print(selected_recipe.name)
-  print("Description: ", selected_recipe.description)
-  print("Ingredients: ", selected_recipe.ingredients)
-  print("Steps:")
-  step_counter = 0
-  for step in selected_recipe.steps: #allows the user to parse through the steps one by one
-    step_counter+=1
-    print(step_counter, step)
-  response = input("Press enter to view this recipe step by step, or type SKIP.")
-  if response.lower() != "skip": #the user can skip viewing the recipe step by step
-    stepThroughRecipe(recipe_num)
-  input("Press Enter to return to main menu")
+def displayRecipe(recipe_name):
+  if recipe_name != None:
+    selected_recipe = getRecipeFromDatabase(recipe_name)
+    selected_recipe = Recipe(selected_recipe['name'], selected_recipe['description'], selected_recipe['ingredients'], selected_recipe['steps'])
+    print(selected_recipe.name)
+    print("Description: ", selected_recipe.description)
+    print("Ingredients: ", selected_recipe.ingredients)
+    print("Steps:")
+    step_counter = 0
+    for step in selected_recipe.steps: #allows the user to parse through the steps one by one
+      step_counter+=1
+      print(step_counter, step)
+    response = input("Press enter to view this recipe step by step, or type SKIP.")
+    if response.lower() != "skip": #the user can skip viewing the recipe step by step
+      stepThroughRecipe(recipe_num)
+    input("Press Enter to return to main menu")
 
-def stepThroughRecipe(recipe_num): #allows the user to parse through the steps one by one
-  selected_recipe = list_of_recipes[recipe_num-1] #displays the selected recipe given its position in the list
+def stepThroughRecipe(selected_recipe): #allows the user to parse through the steps one by one
   steps = selected_recipe.steps
   step_counter = 0
   while(step_counter < len(steps)):
@@ -57,7 +58,7 @@ def stepThroughRecipe(recipe_num): #allows the user to parse through the steps o
       else:
         step_counter += 1
 
-def displaySearchedRecipe(selected_recipe, recipe_num): #displays the selected recipe
+def displaySearchedRecipe(selected_recipe): #displays the selected recipe
   print("Description: ", selected_recipe.description)
   print("Ingredients: ", selected_recipe.ingredients)
   print("Steps:")
@@ -67,45 +68,29 @@ def displaySearchedRecipe(selected_recipe, recipe_num): #displays the selected r
     print(step_counter, step)
   response = input("Press enter to view this recipe step by step, or type SKIP.")
   if response.lower() != "skip":
-    stepThroughRecipe(recipe_num)
+    stepThroughRecipe(selected_recipe)
   print("Enter any integer to return to the main menu :)")
 
-def searchBySubstring(recipe_name): #if the recipe the user is searching for matches a substring within another recipe then it selects the first recipe that matches
-  recipe_num = 0
-  for recipe in list_of_recipes:
-    recipe_num+=1
-    if(recipe_name.lower() in recipe.name.lower()):
-      return True, recipe, recipe_num
-  return False, -1, -1
-
-def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly off from other recipes
-  recipe_num = 0
-  for recipe in list_of_recipes:
-    recipe_num+=1
-    if(fuzz.ratio(recipe_name.lower(), recipe.name.lower()) >= 70): #if the fuzzy ratio is 70% or higher, then it will return the recipe
-      return True, recipe, recipe_num
-  return False, -1
+# def searchBySubstring(recipe_name): #if the recipe the user is searching for matches a substring within another recipe then it selects the first recipe that matches
+#   recipe_num = 0
+#   for recipe in list_of_recipes:
+#     recipe_num+=1
+#     if(recipe_name.lower() in recipe.name.lower()):
+#       return True, recipe, recipe_num
+#   return False, -1, -1
+#
+# def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly off from other recipes
+#   recipe_num = 0
+#   for recipe in list_of_recipes:
+#     recipe_num+=1
+#     if(fuzz.ratio(recipe_name.lower(), recipe.name.lower()) >= 70): #if the fuzzy ratio is 70% or higher, then it will return the recipe
+#       return True, recipe, recipe_num
+#   return False, -1
 
 def searchForRecipe(recipe_name):
-  x = False
-  recipe_num = 0
-  for recipe in list_of_recipes:
-    recipe_num+=1
-    if(recipe.name.lower() == recipe_name.lower()): #search for a recipe exactly by name
-      x = True
-      selected_recipe = recipe
-      displaySearchedRecipe(selected_recipe)
-  if x == False:
-    x, selected_recipe, recipe_num = searchBySubstring(recipe_name) #search by substring matching
-    if not x:
-      x, selected_recipe, recipe_num = searchByFuzzy(recipe_name) #search by fuzzy searching
-      if not x:
-        print("Recipe not found!")
-        input("Press enter to return to main menu")
-      else:
-        displaySearchedRecipe(selected_recipe, recipe_num)
-    else:
-      displaySearchedRecipe(selected_recipe, recipe_num)
+  selected_recipe = getRecipeFromDatabase(recipe_name)
+  displaySearchedRecipe(Recipe(selected_recipe['name'], selected_recipe['description'], selected_recipe['ingredients'], selected_recipe['steps']))
+
 
 print("Welcome to MMY Recipe Book!")
 print("Please select an option:\n Enter 1 to Create a Recipe\n Enter 2 to Search For a Recipe By Name\n Enter 3 to Browse All Recipes\n Enter -1 to Terminate the Program") #command line prompt
@@ -122,15 +107,16 @@ try: #error handling for any command besides an integer
     elif user_input == 3:
       print("Browse All Recipes")
       recipe_counter = 0
+      list_of_recipes = getRecipesFromDatabase(10)
       for recipe in list_of_recipes:
         recipe_counter+=1
-        print(recipe_counter, recipe.name)
+        print(recipe_counter, recipe['name'])
       print("Which number recipe would you like to view?") #need to add error handling
       recipe_to_view = int(input())
-      while recipe_to_view > len(list_of_recipes) or recipe_to_view < 0:
-        print("Invalid number, please try again")
-        recipe_to_view = int(input())
-      displayRecipe(recipe_to_view)
+      while recipe_to_view > 10 or recipe_to_view < 0:
+        print("Invalid number")
+      print(recipe_to_view)
+      displayRecipe(searchForRecipe(list_of_recipes[recipe_to_view-1]['name']))
     else:
       print("Error: Command not found. Please try again.")
       print(
