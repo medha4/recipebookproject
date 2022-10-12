@@ -10,4 +10,4 @@ Jira board url: https://mmy-recipe-book.atlassian.net/jira/software/projects/MRB
 
 Language: Python
 
-Please install the modules, FuzzyWuzzy and Flask, prior to running the program through "pip3 install fuzzywuzzy" or "pip3 install flask"
+Please install the modules, FuzzyWuzzy, Pymongo, and Flask, prior to running the program through "pip3 install fuzzywuzzy" or "pip3 install flask" or "pip3 install pymongo"
