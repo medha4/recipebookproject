@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from fuzzywuzzy import fuzz
 from database import get_database, sendRecipeToDatabase, getRecipeFromDatabase, getRecipeSubstringFromDatabase, getRecipesFromDatabase
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='./templates',static_folder='./assets')
 
 class Recipe: #created the recipe class
 	def __init__(self, name, description, ingredients, steps):
@@ -43,6 +43,27 @@ def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly
 def home():
 		return render_template('home.html')
 
+@app.route("/homepage")
+def homepage():
+		return render_template('home.html')
+
+@app.route("/createpage")
+def createpage():
+		return render_template('create.html')
+
+@app.route("/searchpage")
+def searchpage():
+		return render_template('search.html')
+
+@app.route("/browsepage")
+def browsepage():
+	return render_template('browse.html', list_of_recipes=getRecipesFromDatabase(10))
+
+
+@app.route("/errorpage")
+def errorpage():
+		return render_template('error.html')
+
 
 
 # @app.route('/browse', methods=['GET', 'POST'])
@@ -55,20 +76,20 @@ def home():
 # 		return 'Not a valid request method for this route'
 
 
-@app.route("/task", methods=['GET', 'POST'])
-def index():
-		if request.method == 'POST':
-			task = request.form.to_dict()["options"]
-			if task == "create":
-				return render_template('create.html')
-			elif task == "search":
-				return render_template('search.html')
-			elif task == "browse":
-				return render_template('browse.html', list_of_recipes=getRecipesFromDatabase(10))
-			else:
-					return "Error: Unable to Retrieve Your Requested Option"
-		elif request.method == 'GET':
-				return render_template('home.html', form=form)
+# @app.route("/task", methods=['GET', 'POST'])
+# def index():
+# 		if request.method == 'POST':
+# 			task = request.form.to_dict()["options"]
+# 			if task == "create":
+# 				return render_template('create.html')
+# 			elif task == "search":
+# 				return render_template('search.html')
+# 			elif task == "browse":
+# 				return render_template('browse.html', list_of_recipes=getRecipesFromDatabase(10))
+# 			else:
+# 					return "Error: Unable to Retrieve Your Requested Option"
+# 		elif request.method == 'GET':
+# 				return render_template('home.html', form=form)
 
 @app.route("/create", methods=['POST'])
 def create_a_recipe():
@@ -85,10 +106,10 @@ def display_the_recipe():
 	# print(recipe_name)
 	# for recipe in list_of_recipes:
 	# 	if recipe_name in recipe.name:
-	selected_recipe = getRecipeFromDatabase(recipe_name)
+	x, selected_recipe, recipe_num = searchBySubstring(recipe_name) #search by substring matching
 	if selected_recipe != False:
-		return render_template('viewrecipe.html', name=recipe.name, description=recipe.description, ingredients=recipe.ingredients, steps=recipe.steps)
-	return "Error: Recipe Not Found"
+		return render_template('viewrecipe.html', name=selected_recipe['name'], description=selected_recipe['description'], ingredients=selected_recipe['ingredients'], steps=selected_recipe['steps'])
+	return render_template('error.html')
 
 @app.route("/search", methods=['POST'])
 def search_for_recipe():
@@ -98,7 +119,6 @@ def search_for_recipe():
 	list_of_recipes = getRecipesFromDatabase(10)
 	for recipe in list_of_recipes:
 		recipe_num+=1
-		print("hi")
 		print(recipe)
 		if(recipe['name'].lower() == recipe_name.lower()): #search for a recipe exactly by name
 			x = True
@@ -109,7 +129,7 @@ def search_for_recipe():
 		if not x:
 			x, selected_recipe, recipe_num = searchByFuzzy(recipe_name) #search by fuzzy searching
 			if not x:
-				return "Error: Recipe Not Found"
+				return render_template('error.html')
 			else:
 				return render_template('viewrecipe.html', name=selected_recipe['name'], description=selected_recipe['description'], ingredients=selected_recipe['ingredients'], steps=selected_recipe['steps'])
 		else:
