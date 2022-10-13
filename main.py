@@ -113,8 +113,10 @@ try: #error handling for any command besides an integer
         print(recipe_counter, recipe['name'])
       print("Which number recipe would you like to view?") #need to add error handling
       recipe_to_view = int(input())
-      while recipe_to_view > 10 or recipe_to_view < 0:
-        print("Invalid number")
+      while recipe_to_view > len(list_of_recipes) or recipe_to_view < 0:
+        print("Invalid number, please try again")
+        print("Which number recipe would you like to view?")
+        recipe_to_view = int(input())
       print(recipe_to_view)
       displayRecipe(searchForRecipe(list_of_recipes[recipe_to_view-1]['name']))
     else:
