@@ -35,7 +35,7 @@ def searchByFuzzy(recipe_name): #selects and returns the recipe that is slightly
 		recipe_num+=1
 		if(fuzz.ratio(recipe_name.lower(), recipe['name'].lower()) >= 70): #if the fuzzy ratio is 70% or higher, then it will return the recipe
 			return True, recipe, recipe_num
-	return False, -1
+	return False, -1, -1
 
 
 
